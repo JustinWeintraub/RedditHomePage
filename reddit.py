@@ -53,24 +53,20 @@ def createDatabase(day):
 def getDatabase(day):
   connection = getConnection()
   cursor = connection.cursor(buffered=True)
-  try:
-    cursor.execute(('''SELECT * FROM reddit.posts 
-                    WHERE DATE = '{}'
-                    ORDER BY RAND()
-                    ''').format(day))
-    cursor.close()
-    connection.commit()
-    connection.close()
-    if(cursor.rowcount==0):
-      if(str(day.replace("/","-"))!= str(date.today())):
-        return
-      createData(day)
-    else: 
-      return cursor
-    return(getDatabase(day))
-  except:
-    createDatabase(day)
-    return(getDatabase(day))
+  cursor.execute(('''SELECT * FROM reddit.posts 
+                  WHERE DATE = '{}'
+                  ORDER BY RAND()
+                  ''').format(day))
+  cursor.close()
+  connection.commit()
+  connection.close()
+  if(cursor.rowcount==0):
+    if(str(day.replace("/","-"))!= str(date.today())):
+      return
+    createData(day)
+  else: 
+    return cursor
+  return(getDatabase(day))
   
 
 
