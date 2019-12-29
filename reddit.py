@@ -2,20 +2,20 @@ import mysql.connector
 import praw
 from datetime import date
 import json
-
-reddit = praw.Reddit(client_id=client_id, #based on environment variables
-                     client_secret=client_secret, user_agent=user_agent)
+import os
+reddit = praw.Reddit(client_id=os.environ.get('client_id'), #based on environment variables
+                     client_secret=os.environ.get('client_secret'), user_agent=os.environ.get('user_agent'))
 
 with open('subreddits.json', 'r') as file:
   subreddits = json.loads(file.read())['subreddits']
 
 def getConnection():
   return(
-    mysql.connector.connect(host=host, #based on environment variables
+    mysql.connector.connect(host=os.environ.get('host'), #based on environment variables
                                      port=3306,
-                                     user=user,
-                                     password=password,
-                                     database=database,
+                                     user=os.environ.get('user'),
+                                     password=os.environ.get('password'),
+                                     database=os.environ.get('database'),
                                      auth_plugin='mysql_native_password'
                                      )
   )
