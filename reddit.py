@@ -28,9 +28,9 @@ def createData(day):
       #if(submission.url[8]=="v"):
       #  url = submission.media['reddit_video']['fallback_url']
       #  url = url.split("?")[0]
-      insert = ('''INSERT INTO reddit.posts
+      insert = ('''INSERT INTO {}.posts
       VALUES('{}','{}', '{}', {}, '{}',{})
-      ''').format(submission.title.replace("'", ""), "https://reddit.com"+submission.permalink, subreddit, submission.score, day, "'"+submission.url+"'" if not submission.is_self else 'NULL')
+      ''').format(os.environ.get('database'), submission.title.replace("'", ""), "https://reddit.com"+submission.permalink, subreddit, submission.score, day, "'"+submission.url+"'" if not submission.is_self else 'NULL')
       cursor.execute(insert)
   cursor.close()
   connection.commit()
@@ -53,20 +53,24 @@ def createDatabase(day):
 def getDatabase(day):
   connection = getConnection()
   cursor = connection.cursor(buffered=True)
-  cursor.execute(('''SELECT * FROM reddit.posts 
-                  WHERE DATE = '{}'
-                  ORDER BY RAND()
-                  ''').format(day))
-  cursor.close()
-  connection.commit()
-  connection.close()
-  if(cursor.rowcount==0):
-    if(str(day.replace("/","-"))!= str(date.today())):
-      return
-    createData(day)
-  else: 
-    return cursor
-  return(getDatabase(day))
+  try:
+    cursor.execute(('''SELECT * FROM {}.posts 
+                    WHERE DATE = '{}'
+                    ORDER BY RAND()
+                    ''').format(os.environ.get('database'), day))
+    cursor.close()
+    connection.commit()
+    connection.close()
+    if(cursor.rowcount==0):
+      if(str(day.replace("/","-"))!= str(date.today())):
+        return
+      createData(day)
+    else: 
+      return cursor
+    return(getDatabase(day))
+  except:
+    createDatabase(day)
+    return(getDatabase(day))
   
 
 
