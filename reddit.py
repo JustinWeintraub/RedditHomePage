@@ -69,7 +69,7 @@ def getDatabase(day):
       return cursor
     return(getDatabase(day))
   except:
-    createDatabase()
+    createDatabase(day)
     return(getDatabase(day))
   
 
