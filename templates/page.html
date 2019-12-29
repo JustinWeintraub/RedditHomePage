@@ -1,0 +1,13 @@
+<!doctype html>
+
+<html>
+  <link rel="shortcut icon" href="https://s3.amazonaws.com/django-blog/ico/favicon_v2.ico">
+
+<body style="background-color:#272121">
+  <script type="text/javascript" src="{{ url_for('static', filename='change.js') }}"></script>
+  <div style="color:white;">
+  <input type="date" value="{{day}}" onChange="dateChange(this)">
+  {{data}}
+  </div> 
+</body>
+</html>
