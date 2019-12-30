@@ -54,7 +54,7 @@ def getDatabase(day):
   connection = getConnection()
   cursor = connection.cursor(buffered=True)
   try:
-    cursor.execute(('''DELETE FROM {}.posts''').format(os.environ.get('database'))
+    cursor.execute(('''DELETE FROM {}.posts''').format(os.environ.get('database')))
     cursor.execute(('''SELECT * FROM {}.posts 
                     WHERE DATE = '{}'
                     ORDER BY RAND()
